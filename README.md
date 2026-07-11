@@ -77,6 +77,28 @@ make all-tests   # both
 make clean
 ```
 
+## Example
+
+`make example` builds and runs [`examples/demo.sml`](examples/demo.sml), which
+tokenizes and parses a handful of sample command lines exercising pipes,
+`&&`/`||`, `;`, and `cd` (output is byte-identical under MLton and Poly/ML):
+
+```
+Tokenizing:
+  echo hello 'quoted arg' world
+    -> [echo, hello, quoted arg, world]
+  ls -la | grep foo && echo ok
+    -> [ls, -la, |, grep, foo, &&, echo, ok]
+
+Parsing:
+  cd /tmp; ls | grep txt
+    -> (Cd /tmp ; (Command ls | Command grep txt))
+  make test && make example || echo failed
+    -> ((Command make test && Command make example) || Echo failed)
+  echo one; echo two; echo three
+    -> ((Echo one ; Echo two) ; Echo three)
+```
+
 ## Project layout
 
 ```
